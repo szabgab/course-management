@@ -6,4 +6,14 @@
   and the layout "templates/layouts/default.html.ep",
   <%= link_to 'click here' => url_for %> to reload the page or
   <%= link_to 'here' => '/index.html' %> to move forward to a static page.
+  <% use Data::Dumper; %>
+<pre>
+  <%= Dumper $cc %>
+</pre>
+
+  <ul>
+  <% for my $exercise_ref (@{ $cc->[0]{exercises} }) { %>
+     <li><a href="<%= $exercise_ref->{url} %>"><%= $exercise_ref->{title} %></a></li>
+  <% } %>
+  </ul>
 </p>

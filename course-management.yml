@@ -1,3 +1,4 @@
 ---
 secrets:
   - 1220edf81263ffb1a06f92304eafa2ce51cf7c69
+course_config: courses/config.yml
