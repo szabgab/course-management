@@ -7,13 +7,21 @@
   <%= link_to 'click here' => url_for %> to reload the page or
   <%= link_to 'here' => '/index.html' %> to move forward to a static page.
   <% use Data::Dumper; %>
-<pre>
-  <%= Dumper $cc %>
-</pre>
 
   <ul>
   <% for my $exercise_ref (@{ $cc->[0]{exercises} }) { %>
      <li><a href="<%= $exercise_ref->{url} %>"><%= $exercise_ref->{title} %></a></li>
   <% } %>
   </ul>
+
+  <ul>
+  <% for my $course_ref (@$cc) { %>
+     <li><a href="/course/<%= $course_ref->{id} %>"><%= $course_ref->{name} %></a></li>
+  <% } %>
+  </ul>
+
+<pre>
+  <%= Dumper $cc %>
+</pre>
+
 </p>

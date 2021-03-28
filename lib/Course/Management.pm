@@ -22,6 +22,7 @@ sub startup ($self) {
 
   # Normal route to controller
   $r->get('/' => {cc => $course_config})->to('example#welcome');
+  $r->get('/course/:id' => {cc => $course_config})->to('course#list_exercises');
 }
 
 1;

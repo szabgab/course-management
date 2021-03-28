@@ -1,0 +1,18 @@
+% layout 'default';
+% title $course->{name};
+
+<% use Data::Dumper; %>
+
+<p>
+  <ul>
+  <% for my $exercise_ref (@{ $course->{exercises} }) { %>
+     <li><a href="<%= $exercise_ref->{url} %>"><%= $exercise_ref->{title} %></a></li>
+  <% } %>
+  </ul>
+
+<pre>
+  <%= Dumper $course %>
+</pre>
+
+
+</p>

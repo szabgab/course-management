@@ -1,4 +1,5 @@
 - name: Programming Bootcamp 2021.10
+  id: bootcamp-2021-10
   students:
       - name: Foo
         email: gabor@code-maven.com
@@ -9,3 +10,13 @@
         url: https://code-maven.com/slides/perl/exercise-hello-world
       - title: Rectangular
         url: https://code-maven.com/slides/perl/exercise-rectangular
+- name: Advanced 2021.06
+  id: advanced-2021-06
+  students:
+      - name: Foo
+        email: gabor@code-maven.com
+      - name: Advanced Bar
+        email: other@perlmaven.com
+  exercises:
+      - title: test blogs.perl.org
+        url: https://code-maven.com/slides/perl/exercise-blogs-perl-org
