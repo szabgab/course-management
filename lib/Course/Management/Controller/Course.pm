@@ -1,6 +1,5 @@
 package Course::Management::Controller::Course;
 use Mojo::Base 'Mojolicious::Controller', -signatures;
-#use Mojo::Upload;
 
 sub list_exercises ($self) {
   my $id = $self->param('id');
