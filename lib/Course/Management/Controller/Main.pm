@@ -10,7 +10,9 @@ sub welcome ($self) {
 
 sub login ($self) {
   my $cc = $self->course_config;
-  my $email = $self->param('email');
+  my $email = lc $self->param('email');
+  $email =~ s/^\s+//;
+  $email =~ s/\s+$//;
   my @emails = uniq map {$_->{email}} map {@{ $_->{students} }} @$cc;
   my $success = any { $_ eq $email } @emails;
   $self->app->log->info($email);
