@@ -5,7 +5,8 @@ use Mojo::Base 'Mojolicious::Controller', -signatures;
 sub welcome ($self) {
 
   # Render template "example/welcome.html.ep" with message
-  $self->render(msg => 'Welcome to the Mojolicious real-time web framework!');
+  my $cc = $self->course_config;
+  $self->render(msg => 'Welcome to the Mojolicious real-time web framework!', cc => $cc);
 }
 
 1;
