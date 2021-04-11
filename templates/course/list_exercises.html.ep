@@ -4,7 +4,7 @@
 <% use Data::Dumper; %>
 
 <p>
-  <ul>
+  <ul id="exercises">
   <% for my $exercise_ref (@{ $course->{exercises} }) { %>
      <li><a href="<%= $exercise_ref->{url} %>"><%= $exercise_ref->{title} %></a></li>
   <% } %>
