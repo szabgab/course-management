@@ -21,7 +21,7 @@ sub startup ($self) {
   my $r = $self->routes;
 
   # Normal route to controller
-  $r->get('/')->to('example#welcome');
+  $r->get('/')->to('main#welcome');
   $r->get('/course/:id')->to('course#list_exercises');
   $r->post('/upload')->to('course#upload');
 }
