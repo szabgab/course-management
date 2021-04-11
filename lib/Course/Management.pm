@@ -12,6 +12,7 @@ sub startup ($self) {
   $home->detect;
 
   my $course_config = LoadFile($home->child($config->{course_config}));
+  $self->helper(course_config => sub { state $course_config_data = $course_config });
 
   # Configure the application
   $self->secrets($config->{secrets});
@@ -20,9 +21,9 @@ sub startup ($self) {
   my $r = $self->routes;
 
   # Normal route to controller
-  $r->get('/' => {cc => $course_config})->to('example#welcome');
-  $r->get('/course/:id' => {cc => $course_config})->to('course#list_exercises');
-  $r->post('/upload' => {cc => $course_config})->to('course#upload');
+  $r->get('/')->to('example#welcome');
+  $r->get('/course/:id')->to('course#list_exercises');
+  $r->post('/upload')->to('course#upload');
 }
 
 1;
