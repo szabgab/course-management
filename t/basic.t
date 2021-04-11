@@ -1,7 +1,9 @@
+use experimental 'signatures';
 use Mojo::Base -strict;
 
 use Test::More;
 use Test::Mojo;
+use Test::MockModule;
 use YAML qw(LoadFile);
 
 my $t = Test::Mojo->new('Course::Management');
@@ -26,15 +28,39 @@ subtest course => sub {
 };
 
 subtest login_failed => sub {
+    my $called_sendmail;
+    my $module = Test::MockModule->new( 'Course::Management::Controller::Main');
+    $module->mock('sendmail', sub {
+        note 'mocking sendmail';
+        $called_sendmail = 1;
+    });
+
     $t->post_ok('/login' => form => {email => 'foo@bar.com'});
     $t->status_is(200);
     $t->content_like(qr{Invalid email});
+    ok !$called_sendmail, 'no sendmail';
 };
 
+
 subtest login => sub {
+    my $called_sendmail;
+    my $sent_email;
+    my $sent_code;
+    my $module = Test::MockModule->new( 'Course::Management::Controller::Main');
+    no warnings 'experimental';
+    $module->mock('sendmail', sub ($email, $code) {
+        note 'mocking sendmail';
+        $called_sendmail = 1;
+        $sent_email  = $email;
+        $sent_code   = $code;
+    });
+
     $t->post_ok('/login' => form => { email => $course_config->[0]{students}[0]{email} });
     $t->status_is(200);
     $t->content_like(qr{We have sent an email to});
+    ok $called_sendmail, 'sendmail';
+    is $sent_email, $course_config->[0]{students}[0]{email};
+    note "code: $sent_code";
 };
 
 
