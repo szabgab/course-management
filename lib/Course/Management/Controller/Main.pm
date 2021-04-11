@@ -1,5 +1,6 @@
 package Course::Management::Controller::Main;
 use Mojo::Base 'Mojolicious::Controller', -signatures;
+use List::Util qw(uniq any);
 
 sub welcome ($self) {
 
@@ -10,15 +11,8 @@ sub welcome ($self) {
 sub login ($self) {
   my $cc = $self->course_config;
   my $email = $self->param('email');
-  my $success = 0;
-  for my $course (@$cc) {
-    for my $student (@{ $course->{students} }) {
-       if ($email eq $student->{email}) {
-         $success = 1;
-         last;
-       }
-    }
-  }
+  my @emails = uniq map {$_->{email}} map {@{ $_->{students} }} @$cc;
+  my $success = any { $_ eq $email } @emails;
   $self->app->log->info($email);
   # TODO check email, generate code, save code to db, send email
   $self->render(email => $email, success => $success);
