@@ -1,6 +1,5 @@
 package Course::Management::Controller::Course;
 use Mojo::Base 'Mojolicious::Controller', -signatures;
-use Mojo::Home;
 #use Mojo::Upload;
 
 sub list_exercises ($self) {
@@ -19,7 +18,7 @@ sub upload ($self) {
   my ($course) = grep {$_->{id} eq $id} @$cc;
   die "'$id'" if not $course;
 
-  my $home = Mojo::Home->new;
+  my $home = $self->app->home;
   $home->detect;
 
   my $upload = $self->req->upload('upload');

@@ -1,7 +1,6 @@
 package Course::Management;
 use Mojo::Base 'Mojolicious', -signatures;
 use YAML qw(LoadFile);
-use Mojo::Home;
 
 # This method will run once at server start
 sub startup ($self) {
@@ -9,7 +8,7 @@ sub startup ($self) {
   # Load configuration from config file
   my $config = $self->plugin('NotYAMLConfig');
 
-  my $home = Mojo::Home->new;
+  my $home = $self->app->home;
   $home->detect;
 
   my $course_config = LoadFile($home->child($config->{course_config}));
