@@ -25,5 +25,17 @@ subtest course => sub {
     $t->text_is(qq{a[href="$course_config->[0]{exercises}[1]{url}"]}, $course_config->[0]{exercises}[1]{title});
 };
 
+subtest login_failed => sub {
+    $t->post_ok('/login' => form => {email => 'foo@bar.com'});
+    $t->status_is(200);
+    $t->content_like(qr{Invalid email});
+};
+
+subtest login => sub {
+    $t->post_ok('/login' => form => { email => $course_config->[0]{students}[0]{email} });
+    $t->status_is(200);
+    $t->content_like(qr{We have sent an email to});
+};
+
 
 done_testing();

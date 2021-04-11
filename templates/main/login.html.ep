@@ -1,0 +1,13 @@
+% layout 'default';
+% title 'Login';
+
+<h2>Login is in progress</h2>
+<p>
+
+<% if ($success) { %>
+   We have sent an email to <b><%= $email %></b>, please check your email client and click on the link we sent you to proceed.
+<% } else { %>
+   Invalid email <b><%= $email %></b> address.
+<% } %>
+
+</p>

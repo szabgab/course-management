@@ -24,6 +24,7 @@ sub startup ($self) {
   $r->get('/')->to('main#welcome');
   $r->get('/course/:id')->to('course#list_exercises');
   $r->post('/upload')->to('course#upload');
+  $r->post('/login')->to('main#login');
 }
 
 1;
