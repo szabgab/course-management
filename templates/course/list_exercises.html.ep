@@ -1,18 +1,14 @@
 % layout 'default';
 % title $course->{name};
 
-<% use Data::Dumper; %>
 
 <p>
   <ul id="exercises">
-  <% for my $exercise_ref (@{ $course->{exercises} }) { %>
-     <li><a href="<%= $exercise_ref->{url} %>"><%= $exercise_ref->{title} %></a></li>
-  <% } %>
+  % for my $exercise (exercises $course->{id}) {
+     <li><a href="<%= $exercise->{url} %>"><%= $exercise->{title} %></a></li>
+  % }
   </ul>
 
-<pre>
-  <%= Dumper $course %>
-</pre>
 
 <form method="POST" action="/upload" enctype="multipart/form-data">
 <input type="hidden" name="id" value="<%= $course->{id} %>">

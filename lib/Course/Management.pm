@@ -29,6 +29,12 @@ sub startup ($self) {
     }
   });
 
+  $self->helper(exercises => sub($c, $course_id) {
+    my ($course_ref) = grep { $_->{id} eq $course_id } @$course_config;
+    return if not defined $course_ref;
+    return @{ $course_ref->{exercises} };
+  });
+
 
   # Configure the application
   $self->secrets($config->{secrets});
