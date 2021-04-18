@@ -3,9 +3,7 @@ use Mojo::Base 'Mojolicious::Controller', -signatures;
 use List::Util qw(uniq any);
 
 sub welcome ($self) {
-
-  my $cc = $self->course_config;
-  $self->render(cc => $cc);
+  $self->render();
 }
 
 sub login ($self) {
