@@ -1,6 +1,7 @@
 package Course::Management::Controller::Main;
 use Mojo::Base 'Mojolicious::Controller', -signatures;
 use List::Util qw(uniq any);
+use Data::UUID;
 
 sub welcome ($self) {
   $self->render();
@@ -20,10 +21,7 @@ sub login ($self) {
 
   # TODO check email, generate code, save code to db, send email
 
-use Data::UUID;
-  my $ug = Data::UUID->new;
-  my $uuid = $ug->create;
-  my $code = $ug->to_string($uuid);
+  my $code = _get_code();
   $self->app->log->info($code);
 
   sendmail($email, $code);
@@ -34,5 +32,13 @@ use Data::UUID;
 sub sendmail($email, $code) {
     return;
 }
+
+sub _get_code {
+  my $ug = Data::UUID->new;
+  my $uuid = $ug->create;
+  my $code = $ug->to_string($uuid);
+  return $code;
+}
+
 
 1;
