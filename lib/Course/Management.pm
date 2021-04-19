@@ -47,6 +47,8 @@ sub startup ($self) {
   $r->get('/course/:id')->to('course#list_exercises');
   $r->post('/upload')->to('course#upload');
   $r->post('/login')->to('main#login');
+  $r->get('/login/:code')->to('main#login_get');
+  $r->get('/logout')->to('main#logout');
 }
 
 1;

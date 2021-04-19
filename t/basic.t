@@ -61,6 +61,9 @@ subtest login => sub {
     ok $called_sendmail, 'sendmail';
     is $sent_email, $course_config->[0]{students}[0]{email};
     note "code: $sent_code";
+    # visit $t->get_ok("/login/$sent_code");
+    # $t->status_is(200);
+    # visit http:// to see we are logged in
 };
 
 

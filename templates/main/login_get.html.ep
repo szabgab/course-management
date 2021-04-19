@@ -1,0 +1,13 @@
+% layout 'default';
+% title 'Login';
+
+% if ($message) {
+   <h2>Failed Login</h2>
+   <%= $message %>
+% } else {
+   <h2>Login is successful</h2>
+% }
+
+<p>
+
+</p>
