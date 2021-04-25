@@ -44,6 +44,7 @@ sub startup ($self) {
 
   # Normal route to controller
   $r->get('/')->to('main#welcome');
+  $r->get('/courses')->to('course#list_courses');
   $r->get('/course/:id')->to('course#list_exercises');
   $r->post('/upload')->to('course#upload');
   $r->post('/login')->to('main#login');

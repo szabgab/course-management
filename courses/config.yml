@@ -20,3 +20,11 @@
   exercises:
       - title: test blogs.perl.org
         url: https://code-maven.com/slides/perl/exercise-blogs-perl-org
+- name: Another course
+  id: another-date
+  students:
+      - name: Advanced Bar
+        email: other@perlmaven.com
+  exercises:
+      - title: test blogs.perl.org
+        url: https://code-maven.com/slides/perl/exercise-blogs-perl-org

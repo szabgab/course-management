@@ -12,10 +12,4 @@
 <input type="submit" value="Login">
 </form>
 % }
-  <ul id="courses">
-  % my %courses = courses;
-  % for my $course_id (sort keys %courses) {
-     <li id="<%= $course_id %>"><a href="/course/<%= $course_id %>"><%= $courses{$course_id} %></a></li>
-  % }
-  </ul>
 </p>

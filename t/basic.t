@@ -15,8 +15,6 @@ subtest main => sub {
     $t->status_is(200);
     $t->content_like(qr/Welcome to the Course Management App/i);
 
-    $t->content_like(qr{$course_config->[0]{name}});
-    $t->text_is("#$course_config->[0]{id} a", $course_config->[0]{name});
 };
 
 subtest course => sub {
@@ -39,6 +37,9 @@ subtest login_failed => sub {
     $t->status_is(200);
     $t->content_like(qr{Invalid email});
     ok !$called_sendmail, 'no sendmail';
+
+    $t->get_ok('/courses');
+    $t->status_is(401);
 };
 
 subtest login_verification_fail => sub {
@@ -47,6 +48,9 @@ subtest login_verification_fail => sub {
     #diag $t->tx->res->body;
     $t->content_like(qr{<h2>Failed Login</h2>});
     $t->content_like(qr{Invalid code});
+
+    $t->get_ok('/courses');
+    $t->status_is(401);
 };
 
 subtest login => sub {
@@ -69,9 +73,18 @@ subtest login => sub {
     is $sent_email, $course_config->[0]{students}[0]{email};
     note "code: $sent_code";
 
-    # visit $t->get_ok("/login/$sent_code");
-    # $t->status_is(200);
-    # visit http:// to see we are logged in
+    $t->get_ok("/login/$sent_code");
+    $t->status_is(200);
+    #diag $t->tx->res->body;
+    $t->content_like(qr{<h2>Login is successful</h2>});
+
+    $t->get_ok('/courses');
+    $t->status_is(200);
+    $t->content_like(qr{$course_config->[0]{name}});
+    $t->text_is("#$course_config->[0]{id} a", $course_config->[0]{name});
+    $t->content_like(qr{$course_config->[1]{name}});
+    $t->text_is("#$course_config->[1]{id} a", $course_config->[1]{name});
+    $t->content_unlike(qr{$course_config->[2]{name}});
 };
 
 

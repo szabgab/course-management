@@ -1,6 +1,12 @@
 package Course::Management::Controller::Course;
 use Mojo::Base 'Mojolicious::Controller', -signatures;
 
+sub list_courses ($self) {
+  my $email = $self->session('email');
+  return $self->render(text => 'Not logged in', status => 401) if not $email;
+  $self->render(email => $email);
+}
+
 sub list_exercises ($self) {
   my $id = $self->param('id');
   my $cc = $self->course_config;
@@ -8,6 +14,7 @@ sub list_exercises ($self) {
 
   $self->render(course => $course, cc => $cc);
 }
+
 
 sub upload ($self) {
   my $id = $self->param('id');
