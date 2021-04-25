@@ -41,6 +41,13 @@ subtest login_failed => sub {
     ok !$called_sendmail, 'no sendmail';
 };
 
+subtest login_verification_fail => sub {
+    $t->get_ok("/login/some-invalid-code");
+    $t->status_is(200);
+    #diag $t->tx->res->body;
+    $t->content_like(qr{<h2>Failed Login</h2>});
+    $t->content_like(qr{Invalid code});
+};
 
 subtest login => sub {
     my $called_sendmail;
@@ -61,6 +68,7 @@ subtest login => sub {
     ok $called_sendmail, 'sendmail';
     is $sent_email, $course_config->[0]{students}[0]{email};
     note "code: $sent_code";
+
     # visit $t->get_ok("/login/$sent_code");
     # $t->status_is(200);
     # visit http:// to see we are logged in
