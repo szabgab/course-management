@@ -32,6 +32,10 @@ subtest course => sub {
     $t->status_is(200);
     $t->text_is('#exercises :first-child a', $course_config->[0]{exercises}[0]{title});
     $t->text_is(qq{a[href="$course_config->[0]{exercises}[1]{url}"]}, $course_config->[0]{exercises}[1]{title});
+
+    $t->get_ok("/course/$course_config->[2]{id}");
+    $t->status_is(401);
+    $t->content_is('You are not in this course');
 };
 
 subtest login_failed => sub {
