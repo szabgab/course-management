@@ -6,10 +6,15 @@ use Test::Mojo;
 use Test::MockModule;
 use YAML qw(LoadFile);
 
-my $t = Test::Mojo->new('Course::Management');
-my $course_config = LoadFile($t->app->home->child($t->app->config->{course_config}));
+my $course_config = get_course_config();
+
+sub get_course_config {
+    my $t = Test::Mojo->new('Course::Management');
+    LoadFile($t->app->home->child($t->app->config->{course_config}));
+}
 
 subtest main => sub {
+    my $t = Test::Mojo->new('Course::Management');
     $t->get_ok('/');
 
     $t->status_is(200);
@@ -18,6 +23,7 @@ subtest main => sub {
 };
 
 subtest course => sub {
+    my $t = Test::Mojo->new('Course::Management');
     $t->get_ok("/course/$course_config->[0]{id}");
 
     $t->status_is(200);
@@ -26,6 +32,7 @@ subtest course => sub {
 };
 
 subtest login_failed => sub {
+    my $t = Test::Mojo->new('Course::Management');
     my $called_sendmail;
     my $module = Test::MockModule->new( 'Course::Management::Controller::Main');
     $module->mock('sendmail', sub {
@@ -43,11 +50,13 @@ subtest login_failed => sub {
 };
 
 subtest not_accessible_without_login => sub {
+    my $t = Test::Mojo->new('Course::Management');
     $t->get_ok('/courses');
     $t->status_is(401);
 };
 
 subtest login_verification_fail => sub {
+    my $t = Test::Mojo->new('Course::Management');
     $t->get_ok("/login/some-invalid-code");
     $t->status_is(200);
     #diag $t->tx->res->body;
@@ -59,6 +68,7 @@ subtest login_verification_fail => sub {
 };
 
 subtest login => sub {
+    my $t = Test::Mojo->new('Course::Management');
     my $called_sendmail;
     my $sent_email;
     my $sent_code;
