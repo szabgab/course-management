@@ -26,7 +26,7 @@ subtest main => sub {
 
 subtest course => sub {
     my $t = Test::Mojo->new('Course::Management');
-    # login as user 0
+    login($t);
     $t->get_ok("/course/$course_config->[0]{id}");
 
     $t->status_is(200);
@@ -50,15 +50,18 @@ subtest login_failed => sub {
 
     $t->get_ok('/courses');
     $t->status_is(401);
+    $t->content_is('Not logged in');
 };
 
 subtest not_accessible_without_login => sub {
     my $t = Test::Mojo->new('Course::Management');
     $t->get_ok('/courses');
     $t->status_is(401);
+    $t->content_is('Not logged in');
 
-    #$t->get_ok("/course/$course_config->[0]{id}");
-    #$t->status_is(401);
+    $t->get_ok("/course/$course_config->[0]{id}");
+    $t->status_is(401);
+    $t->content_is('Not logged in');
 };
 
 subtest login_verification_fail => sub {
@@ -71,6 +74,7 @@ subtest login_verification_fail => sub {
 
     $t->get_ok('/courses');
     $t->status_is(401);
+    $t->content_is('Not logged in');
 };
 
 subtest login => sub {
@@ -92,6 +96,7 @@ subtest login => sub {
 
     $t->get_ok('/courses');
     $t->status_is(401);
+    $t->content_is('Not logged in');
 };
 
 

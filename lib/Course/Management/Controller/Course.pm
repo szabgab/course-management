@@ -8,11 +8,17 @@ sub list_courses ($self) {
 }
 
 sub list_exercises ($self) {
-  my $id = $self->param('id');
-  my $cc = $self->course_config;
-  my ($course) = grep {$_->{id} eq $id} @$cc;
+  my $email = $self->session('email');
+  return $self->render(text => 'Not logged in', status => 401) if not $email;
 
-  $self->render(course => $course, cc => $cc);
+  my $course_id = $self->param('id');
+  my %courses = $self->courses($email);
+  return $self->render(text => 'You are not in this course', status => 401) if not exists $courses{$course_id};
+
+  my $cc = $self->course_config;
+  my ($course) = grep {$_->{id} eq $course_id} @$cc;
+
+  $self->render(course => $course);
 }
 
 
