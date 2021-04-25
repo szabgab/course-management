@@ -6,6 +6,8 @@ use Test::Mojo;
 use Test::MockModule;
 use YAML qw(LoadFile);
 
+no warnings 'experimental';
+
 my $course_config = get_course_config();
 
 sub get_course_config {
@@ -19,11 +21,12 @@ subtest main => sub {
 
     $t->status_is(200);
     $t->content_like(qr/Welcome to the Course Management App/i);
-
+    # Test there is a form to login
 };
 
 subtest course => sub {
     my $t = Test::Mojo->new('Course::Management');
+    # login as user 0
     $t->get_ok("/course/$course_config->[0]{id}");
 
     $t->status_is(200);
@@ -53,6 +56,9 @@ subtest not_accessible_without_login => sub {
     my $t = Test::Mojo->new('Course::Management');
     $t->get_ok('/courses');
     $t->status_is(401);
+
+    #$t->get_ok("/course/$course_config->[0]{id}");
+    #$t->status_is(401);
 };
 
 subtest login_verification_fail => sub {
@@ -69,6 +75,29 @@ subtest login_verification_fail => sub {
 
 subtest login => sub {
     my $t = Test::Mojo->new('Course::Management');
+    login($t);
+
+    $t->get_ok('/courses');
+    $t->status_is(200);
+    $t->content_like(qr{$course_config->[0]{name}});
+    $t->text_is("#$course_config->[0]{id} a", $course_config->[0]{name});
+    $t->content_like(qr{$course_config->[1]{name}});
+    $t->text_is("#$course_config->[1]{id} a", $course_config->[1]{name});
+    $t->content_unlike(qr{$course_config->[2]{name}});
+
+    $t->get_ok('/logout')
+      ->status_is(200)
+      ->content_like(qr{<h2>Bye</h2>});
+    #diag $t->tx->res->body;
+
+    $t->get_ok('/courses');
+    $t->status_is(401);
+};
+
+
+done_testing();
+
+sub login($t) {
     my $called_sendmail;
     my $sent_email;
     my $sent_code;
@@ -92,23 +121,6 @@ subtest login => sub {
     $t->status_is(200);
     #diag $t->tx->res->body;
     $t->content_like(qr{<h2>Login is successful</h2>});
-
-    $t->get_ok('/courses');
-    $t->status_is(200);
-    $t->content_like(qr{$course_config->[0]{name}});
-    $t->text_is("#$course_config->[0]{id} a", $course_config->[0]{name});
-    $t->content_like(qr{$course_config->[1]{name}});
-    $t->text_is("#$course_config->[1]{id} a", $course_config->[1]{name});
-    $t->content_unlike(qr{$course_config->[2]{name}});
-
-    $t->get_ok('/logout')
-      ->status_is(200)
-      ->content_like(qr{<h2>Bye</h2>});
-    #diag $t->tx->res->body;
-
-    $t->get_ok('/courses');
-    $t->status_is(401);
-};
+}
 
 
-done_testing();
