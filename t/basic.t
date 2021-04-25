@@ -52,14 +52,14 @@ subtest login_failed => sub {
     $t->content_like(qr{Invalid email});
     ok !$called_sendmail, 'no sendmail';
 
-    $t->get_ok('/courses');
+    $t->get_ok('/course/');
     $t->status_is(401);
     $t->content_is('Not logged in');
 };
 
 subtest not_accessible_without_login => sub {
     my $t = Test::Mojo->new('Course::Management');
-    $t->get_ok('/courses');
+    $t->get_ok('/course/');
     $t->status_is(401);
     $t->content_is('Not logged in');
 
@@ -76,7 +76,7 @@ subtest login_verification_fail => sub {
     $t->content_like(qr{<h2>Failed Login</h2>});
     $t->content_like(qr{Invalid code});
 
-    $t->get_ok('/courses');
+    $t->get_ok('/course/');
     $t->status_is(401);
     $t->content_is('Not logged in');
 };
@@ -85,7 +85,7 @@ subtest login => sub {
     my $t = Test::Mojo->new('Course::Management');
     login($t);
 
-    $t->get_ok('/courses');
+    $t->get_ok('/course/');
     $t->status_is(200);
     $t->content_like(qr{$course_config->[0]{name}});
     $t->text_is("#$course_config->[0]{id} a", $course_config->[0]{name});
@@ -98,7 +98,7 @@ subtest login => sub {
       ->content_like(qr{<h2>Bye</h2>});
     #diag $t->tx->res->body;
 
-    $t->get_ok('/courses');
+    $t->get_ok('/course/');
     $t->status_is(401);
     $t->content_is('Not logged in');
 };

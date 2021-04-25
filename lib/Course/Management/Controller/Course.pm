@@ -3,13 +3,11 @@ use Mojo::Base 'Mojolicious::Controller', -signatures;
 
 sub list_courses ($self) {
   my $email = $self->session('email');
-  return $self->render(text => 'Not logged in', status => 401) if not $email;
   $self->render(email => $email);
 }
 
 sub list_exercises ($self) {
   my $email = $self->session('email');
-  return $self->render(text => 'Not logged in', status => 401) if not $email;
 
   my $course_id = $self->param('id');
   my %courses = $self->courses($email);

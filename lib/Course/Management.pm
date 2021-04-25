@@ -42,14 +42,24 @@ sub startup ($self) {
   # Router
   my $r = $self->routes;
 
+  my $authorized = $r->under('/course' => sub($c) {
+    my $email = $c->session('email');
+    return 1 if $email;
+    $c->render(text => 'Not logged in', status => 401);
+    return undef;
+  });
+
   # Normal route to controller
   $r->get('/')->to('main#welcome');
-  $r->get('/courses')->to('course#list_courses');
-  $r->get('/course/:id')->to('course#list_exercises');
-  $r->post('/upload')->to('course#upload');
   $r->post('/login')->to('main#login');
   $r->get('/login/:code')->to('main#login_get');
+
+  # protected
+  $authorized->get('/')->to('course#list_courses');
+  $authorized->get('/:id')->to('course#list_exercises');
+  $r->post('/upload')->to('course#upload');
   $r->get('/logout')->to('main#logout');
 }
+
 
 1;
