@@ -42,6 +42,11 @@ subtest login_failed => sub {
     $t->status_is(401);
 };
 
+subtest not_accessible_without_login => sub {
+    $t->get_ok('/courses');
+    $t->status_is(401);
+};
+
 subtest login_verification_fail => sub {
     $t->get_ok("/login/some-invalid-code");
     $t->status_is(200);
@@ -85,6 +90,14 @@ subtest login => sub {
     $t->content_like(qr{$course_config->[1]{name}});
     $t->text_is("#$course_config->[1]{id} a", $course_config->[1]{name});
     $t->content_unlike(qr{$course_config->[2]{name}});
+
+    $t->get_ok('/logout')
+      ->status_is(200)
+      ->content_like(qr{<h2>Bye</h2>});
+    #diag $t->tx->res->body;
+
+    $t->get_ok('/courses');
+    $t->status_is(401);
 };
 
 
