@@ -103,6 +103,10 @@ subtest login => sub {
     $t->content_is('Not logged in');
 };
 
+# If a logged in user arrives to the main page or immediately after login
+#    redirect to the list of course
+#    if the user is only listed in one course, redirect to that course
+
 
 done_testing();
 
