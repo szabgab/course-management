@@ -10,7 +10,7 @@ jobs:
       image: "perldocker/perl-tester:5.32"
     steps:
       - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: cpanm --installdeps --notest .
       - name: Regular tests
-        run: |
-          cpanm --installdeps --notest .
-          prove -l
+        run: prove -l
