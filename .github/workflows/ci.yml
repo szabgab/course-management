@@ -1,0 +1,16 @@
+name: CI
+on:
+  push:
+  pull_request:
+jobs:
+  build:
+    runs-on: "ubuntu-latest"
+    name: "Testing.."
+    container:
+      image: "perldocker/perl-tester:5.32"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Regular tests
+        run: |
+          cpanm --installdeps --notest .
+          prove -l
