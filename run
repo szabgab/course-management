@@ -1,2 +1,2 @@
 # for development run
-docker run --rm -p 3001:3000 -v$(pwd)/lib:/opt/lib -v$(pwd)/templates:/opt/templates courses
+docker run --rm -p 3001:3000 -v$(pwd)/lib:/opt/lib -v$(pwd)/templates:/opt/templates -v$(pwd)/t:/opt/t courses $*

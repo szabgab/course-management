@@ -10,6 +10,7 @@ COPY courses courses
 COPY public public
 COPY templates templates
 COPY lib lib
+COPY t t
 
 # COPY lib script ./
 
