@@ -1,5 +1,21 @@
 # Courses
 
+
+## Docker
+
+```
+docker build -t  courses .
+```
+
+```
+docker run --rm courses prove -l
+```
+
+See the `run` file.
+
+
+## Docker Compose
+
 For development run
 
 ```
@@ -10,5 +26,7 @@ In another terminal you can type:
 
 ```
 docker-compose exec web bash
+
 ```
+
 
