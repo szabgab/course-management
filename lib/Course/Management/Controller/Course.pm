@@ -32,6 +32,7 @@ sub upload ($self) {
     my $home = $self->app->home;
     $home->detect;
     my $upload_dir = $self->app->config->{'upload_dir'} // 'data';
+    # TODO stop defaulting to a relative directory called 'data' it won't work now.
 
     my $upload = $self->req->upload('upload');
     my $dir = path($upload_dir)->child('hello');
