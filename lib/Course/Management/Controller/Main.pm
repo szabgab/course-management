@@ -5,6 +5,7 @@ use Data::UUID;
 use YAML qw(DumpFile LoadFile);
 
 sub welcome ($self) {
+    return $self->redirect_to('/course/') if $self->session('email');
     $self->render();
 }
 
@@ -74,7 +75,8 @@ sub login_get ($self) {
     delete $logins->{$code};
     DumpFile($filename, $logins);
 
-    $self->render(message => '');
+    #$self->render(message => '');
+    $self->redirect_to('/course/');
 }
 
 sub sendmail($email, $code) {

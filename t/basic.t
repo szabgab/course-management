@@ -87,11 +87,18 @@ subtest login => sub {
 
     $t->get_ok('/course/');
     $t->status_is(200);
+    $t->content_like(qr{<title>Courses</title>});
     $t->content_like(qr{$course_config->[0]{name}});
     $t->text_is("#$course_config->[0]{id} a", $course_config->[0]{name});
     $t->content_like(qr{$course_config->[1]{name}});
     $t->text_is("#$course_config->[1]{id} a", $course_config->[1]{name});
     $t->content_unlike(qr{$course_config->[2]{name}});
+
+    $t->ua->max_redirects(1);
+    $t->get_ok('/');
+    $t->ua->max_redirects(0);
+    $t->status_is(200);
+    $t->content_like(qr{<title>Courses</title>});
 
     $t->get_ok('/logout')
       ->status_is(200)
@@ -102,10 +109,6 @@ subtest login => sub {
     $t->status_is(401);
     $t->content_is('Not logged in');
 };
-
-# If a logged in user arrives to the main page or immediately after login
-#    redirect to the list of course
-#    if the user is only listed in one course, redirect to that course
 
 
 done_testing();
@@ -130,10 +133,12 @@ sub login($t) {
     is $sent_email, $course_config->[0]{students}[0]{email};
     note "code: $sent_code";
 
+    $t->ua->max_redirects(1);
     $t->get_ok("/login/$sent_code");
+    $t->ua->max_redirects(0);
     $t->status_is(200);
     #diag $t->tx->res->body;
-    $t->content_like(qr{<h2>Login is successful</h2>});
+    $t->content_like(qr{<title>Courses</title>});
 }
 
 
