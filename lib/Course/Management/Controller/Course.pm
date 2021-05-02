@@ -1,5 +1,6 @@
 package Course::Management::Controller::Course;
 use Mojo::Base 'Mojolicious::Controller', -signatures;
+use Mojo::File qw(path);
 
 sub list_courses ($self) {
     my $email = $self->session('email');
@@ -30,9 +31,10 @@ sub upload ($self) {
 
     my $home = $self->app->home;
     $home->detect;
+    my $upload_dir = $self->app->config->{'upload_dir'} // 'data';
 
     my $upload = $self->req->upload('upload');
-    my $dir = $home->child('data', 'hello');
+    my $dir = path($upload_dir)->child('hello');
     $dir->make_path;
     my $filename = $dir->child('a.txt');
     $upload->move_to($filename);
