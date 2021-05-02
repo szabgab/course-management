@@ -4,16 +4,13 @@ use Mojo::Base -strict;
 use Test::More;
 use Test::Mojo;
 use Test::MockModule;
-use YAML qw(LoadFile);
+
+use lib '.';
+use t::lib::TestHelper qw(login get_course_config);
 
 no warnings 'experimental';
 
 my $course_config = get_course_config();
-
-sub get_course_config {
-    my $t = Test::Mojo->new('Course::Management');
-    LoadFile($t->app->home->child($t->app->config->{course_config}));
-}
 
 subtest main => sub {
     my $t = Test::Mojo->new('Course::Management');
@@ -112,33 +109,5 @@ subtest login => sub {
 
 
 done_testing();
-
-sub login($t) {
-    my $called_sendmail;
-    my $sent_email;
-    my $sent_code;
-    my $module = Test::MockModule->new( 'Course::Management::Controller::Main');
-    no warnings 'experimental';
-    $module->mock('sendmail', sub ($email, $code) {
-        note 'mocking sendmail';
-        $called_sendmail = 1;
-        $sent_email  = $email;
-        $sent_code   = $code;
-    });
-
-    $t->post_ok('/login' => form => { email => $course_config->[0]{students}[0]{email} });
-    $t->status_is(200);
-    $t->content_like(qr{We have sent an email to});
-    ok $called_sendmail, 'sendmail';
-    is $sent_email, $course_config->[0]{students}[0]{email};
-    note "code: $sent_code";
-
-    $t->ua->max_redirects(1);
-    $t->get_ok("/login/$sent_code");
-    $t->ua->max_redirects(0);
-    $t->status_is(200);
-    #diag $t->tx->res->body;
-    $t->content_like(qr{<title>Courses</title>});
-}
 
 
