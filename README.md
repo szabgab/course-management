@@ -19,7 +19,8 @@ See the `run` file.
 For development run
 
 ```
-docker-compose -f docker-compose.yml -f docker-compose-override.yml up
+cp docker-compose.override.yml.example docker-compose.override.yml
+docker-compose up
 ```
 
 In another terminal you can type:
