@@ -3,19 +3,25 @@
 
 
 <p>
+  <form method="POST" action="/upload" enctype="multipart/form-data">
+  <input type="hidden" name="id" value="<%= $course->{id} %>">
+  <input type="submit" value="Upload">
+
   <ul id="exercises">
   % for my $exercise (exercises $course->{id}) {
-     <li><a href="<%= $exercise->{url} %>"><%= $exercise->{title} %></a></li>
+     <li><a href="<%= $exercise->{url} %>"><%= $exercise->{title} %></a>
+         <ul class="uploaders">
+         % for my $file (@{ $exercise->{files} }) {
+            <li>
+                <%= $file %>
+                <input type="file" name="<%= $file %>">
+            </li>
+         % }
+         </ul>
+     </li>
   % }
   </ul>
 
-
-<form method="POST" action="/upload" enctype="multipart/form-data">
-<input type="hidden" name="id" value="<%= $course->{id} %>">
-<input type="file" name="upload">
-<input type="submit" value="Upload">
-</form>
-
-
-
+  <input type="submit" value="Upload">
+  </form>
 </p>

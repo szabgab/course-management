@@ -24,7 +24,7 @@ sub list_exercises ($self) {
 sub upload ($self) {
     my $id = $self->param('id');
 
-    # Verify that the ID was indeed one of the IDs we have.
+    # Verify that the ID was indeed one of the course IDs we have.
     my $cc = $self->course_config;
     my ($course) = grep {$_->{id} eq $id} @$cc;
     die "'$id'" if not $course;
@@ -35,11 +35,21 @@ sub upload ($self) {
     return $self->reply->exception('Upload directory does not exist')->rendered(500)
         if not -d $upload_dir;
 
-    my $upload = $self->req->upload('upload');
-    my $dir = path($upload_dir)->child('hello');
-    $dir->make_path;
-    my $filename = $dir->child('a.txt');
-    $upload->move_to($filename);
+    for my $exercise (@{ $course->{exercises} }) {
+        for my $file (@{ $exercise->{files} }) {
+            my $upload = $self->req->upload($file);
+            next unless defined $upload;
+            $self->app->log->info($upload->name);
+            $self->app->log->info($upload->size);
+            next unless $upload->size;
+
+            (my $exercise_name = $exercise->{url}) =~ s{[:/]+}{_}g;
+            my $dir = path($upload_dir)->child($exercise_name);
+            $dir->make_path;
+            my $filename = $dir->child($file);
+            $upload->move_to($filename);
+        }
+    }
 
     $self->render(course => $course, cc => $cc);
 }

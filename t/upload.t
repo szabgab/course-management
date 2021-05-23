@@ -24,7 +24,7 @@ subtest upload_no_upload_dir => sub {
     login($t);
     my $content = 'bar';
     my $upload = {
-        upload => {content => $content, filename => 'baz.txt'},
+        $course_config->[0]{exercises}[0]{files}[0] => {content => $content, filename => 'baz.txt'},
         id => $course_config->[0]{id},
     };
     $t->post_ok('/upload' => form => $upload)->status_is(500);
@@ -47,13 +47,14 @@ subtest upload => sub {
     # TODO test large file
     my $content = 'bar';
     my $upload = {
-        upload => {content => $content, filename => 'baz.txt'},
+        $course_config->[0]{exercises}[0]{files}[0] => {content => $content, filename => 'baz.txt'},
         id => $course_config->[0]{id},
     };
     $t->post_ok('/upload' => form => $upload)->status_is(200);
     #diag $t->tx->res->body;
     $t->content_like(qr{Uploaded});
-    my $actual_content = path("$tempdir/hello/a.txt")->slurp;
+    (my $exercise_name = $course_config->[0]{exercises}[0]{url}) =~ s{[:/]+}{_}g;
+    my $actual_content = path("$tempdir/$exercise_name/$course_config->[0]{exercises}[0]{files}[0]")->slurp;
     is $actual_content, $content;
 };
 

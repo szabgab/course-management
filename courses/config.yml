@@ -8,8 +8,13 @@
   exercises:
       - title: Hello world
         url: https://code-maven.com/slides/perl/exercise-hello-world
+        files:
+          - hello_world.pl
       - title: Rectangular
         url: https://code-maven.com/slides/perl/exercise-rectangular
+        files:
+          - rectangle.pl
+          - rectangle.yml
 - name: Advanced 2021.06
   id: advanced-2021-06
   students:
@@ -20,6 +25,9 @@
   exercises:
       - title: test blogs.perl.org
         url: https://code-maven.com/slides/perl/exercise-blogs-perl-org
+        files:
+          - test_blogs.pl
+          - test_blogs.yaml
 - name: Another course
   id: another-date
   students:
@@ -28,3 +36,6 @@
   exercises:
       - title: test blogs.perl.org
         url: https://code-maven.com/slides/perl/exercise-blogs-perl-org
+        files:
+          - test_blogs.pl
+          - test_blogs.yaml
