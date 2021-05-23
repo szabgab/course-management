@@ -29,10 +29,11 @@ sub upload ($self) {
     my ($course) = grep {$_->{id} eq $id} @$cc;
     die "'$id'" if not $course;
 
-    my $home = $self->app->home;
-    $home->detect;
-    my $upload_dir = $self->app->config->{'upload_dir'} // 'data';
-    # TODO stop defaulting to a relative directory called 'data' it won't work now.
+    my $upload_dir = $self->app->config->{'upload_dir'};
+    return $self->reply->exception('Upload directory not configured')->rendered(500)
+        if not defined $upload_dir;
+    return $self->reply->exception('Upload directory does not exist')->rendered(500)
+        if not -d $upload_dir;
 
     my $upload = $self->req->upload('upload');
     my $dir = path($upload_dir)->child('hello');
