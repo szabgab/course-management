@@ -1,6 +1,108 @@
-% layout 'default';
-% title $course->{name};
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+
+    <title><%= $course->{name} %></title>
+  </head>
+  <body>
+
+      <form method="POST" action="/upload" enctype="multipart/form-data">
+
+      </br>
+      </br>
+
+      <!-- Curious Technoid: Container for the top upload button -->
+      <div class="container">
+             <input type="hidden" name="id" value="<%= $course->{id} %>">
+            <input class="btn btn-primary" type="submit" value="Upload">
+      </div></br>
+
+
+
+
+      % my $counter; # Adding a counter for the serial number
+      % for my $exercise (exercises $course->{id}) {
+      % $counter = 0;
+          <!-- Curious Technoid: Separate container for every exercise -->
+          <div class="container border border-3 rounded-3 p-4">
+              <div class="row">
+                  <div class="col-3">
+                        <a class="btn btn-info" href="<%= $exercise->{url} %>" role="button"><%= $exercise->{title} %></a>
+                  </div>
+              </div>
+
+              <div class="row">
+                  <div class="col-2"></div>
+                  <div class="col-8">
+                    <table class="table table-sm">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Practice File</th>
+                          <th scope="col">Upload Files</th>
+                          <th scope="col">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody  class="align-middle">
+                 % for my $file (@{ $exercise->{files} }) {
+                        <tr>
+                          <th scope="row"><%= ++$counter %></th>
+                          <td><%= $file %></td>
+                          <td>
+                              <div class="mt-2 mb-2">
+                                  <!-- Curious Technoid: If the file upload is pending for approval, we can disable the file upload form.
+                                  -->
+                                  <input class="form-control form-control-sm" id="formFileSm" type="file"  name="<%= $file %>">
+                                </div>
+                          </td>
+                          <td style="text-align:center;">
+                              <!-- Curious Technoid: Based on the status of the file upload, below images can be used:
+                                            File Uploaded     - /images/file-success.svg
+                                            Pending Approval  - /images/file-approval.svg
+                                            File not uploaded - /images/file-pending.svg
+                              -->
+                              <img src="/images/file-pending.svg" />
+                          </td>
+                        </tr>
+                 % }
+                      </tbody>
+                    </table>
+                  </div>
+              </div>
+
+          </div></br>
+
+      % }
+
+
+
+      <!-- Curious Technoid: Container for legends -->
+      <div class="container">
+          <div class="row">
+              <div class="col-9 fst-italic" style="font-size:9pt">
+                  <img src="/images/file-pending.svg"/> File not uploaded
+                  <img src="/images/file-approval.svg" /> Pending Approval
+                  <img src="/images/file-success.svg"/> File uploaded
+              </div>
+              <div class="col-3"> </div>
+          </div>
+      </div></br>
+
+      <!-- Curious Technoid: Container for bottom upload buttons -->
+      <div class="container">
+            <input class="btn btn-primary" type="submit" value="Upload">
+      </div></br>
+
+  </form>
+
+
+<!-- Curious Technoid: Existing Code for reference
 
 <p>
   <form method="POST" action="/upload" enctype="multipart/form-data">
@@ -25,3 +127,10 @@
   <input type="submit" value="Upload">
   </form>
 </p>
+
+-->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
+  </body>
+</html>
