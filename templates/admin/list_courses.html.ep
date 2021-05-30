@@ -1,0 +1,11 @@
+% layout 'default';
+% title 'Admin Courses';
+
+
+  <ul id="courses">
+  % my %courses = courses;
+  % for my $course_id (sort keys %courses) {
+     <li id="<%= $course_id %>"><a href="/admin/<%= $course_id %>"><%= $courses{$course_id} %></a></li>
+  % }
+  </ul>
+

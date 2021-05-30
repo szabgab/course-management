@@ -4,3 +4,4 @@ secrets:
 course_config: courses/config.yml
 login_db: courses/login.yml
 upload_dir: data
+admin_email: admin@code-maven.com

@@ -16,7 +16,7 @@ sub startup ($self) {
     $self->helper(course_config => sub { state $course_config_data = $course_config });
     $self->helper(courses => sub($c, $student_email = undef) {
         state %courses = map { $_->{id} => $_->{name} } @$course_config;
-        if ($student_email) {
+        if ($student_email and $student_email ne $config->{'admin_email'}) {
             my %student_courses;
             for my $course (@$course_config) {
                 if (any { $_->{email} eq $student_email } @{ $course->{students} }) {
@@ -42,6 +42,14 @@ sub startup ($self) {
     # Router
     my $r = $self->routes;
 
+    my $admin_authorized = $r->under('/admin' => sub($c) {
+        my $email = $c->session('email');
+        return 1 if $email and $email eq $self->app->config('admin_email');
+        $c->render(text => 'Not logged in', status => 401);
+        return undef;
+    });
+
+
     my $authorized = $r->under('/course' => sub($c) {
         my $email = $c->session('email');
         return 1 if $email;
@@ -59,6 +67,9 @@ sub startup ($self) {
     $authorized->get('/:id')->to('course#list_exercises');
     $r->post('/upload')->to('course#upload');
     $r->get('/logout')->to('main#logout');
+
+    $admin_authorized->get('/')->to('admin#list_courses');
+    $admin_authorized->get('/:id')->to('admin#list_solutions');
 }
 
 

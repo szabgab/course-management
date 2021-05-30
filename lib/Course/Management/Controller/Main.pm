@@ -15,6 +15,7 @@ sub login ($self) {
     $email =~ s/^\s+//;
     $email =~ s/\s+$//;
     my @emails = uniq map {$_->{email}} map {@{ $_->{students} }} @$cc;
+    push @emails, $self->app->config('admin_email');
     my $success = any { $_ eq $email } @emails;
     $self->app->log->info($email);
     if (not $success) {

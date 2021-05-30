@@ -19,6 +19,7 @@ subtest upload_no_upload_dir => sub {
         secrets => ['1220edf81263ffb1a06f92304eafa2ce51cf7c69'],
         course_config => 'courses/config.yml',
         login_db => 'courses/login.yml',
+        admin_email =>  'fake@code-maven.com',
         #upload_dir no upload dir in this test case!
     });
     login($t);
@@ -40,6 +41,7 @@ subtest upload => sub {
         secrets => ['1220edf81263ffb1a06f92304eafa2ce51cf7c69'],
         course_config => 'courses/config.yml',
         login_db => 'courses/login.yml',
+        admin_email =>  'fake@code-maven.com',
     });
     login($t);
 
