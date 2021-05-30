@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head><title><%= title %></title></head>
-  <body><%= content %></body>
+  <body>
+    <a href="/">home</a>
+    % if (session 'email' and current_route ne 'logout') {
+      | <a href="/logout">logout</a>
+    % }
+    <%= content %>
+  </body>
 </html>
