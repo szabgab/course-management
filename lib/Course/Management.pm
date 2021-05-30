@@ -2,6 +2,7 @@ package Course::Management;
 use Mojo::Base 'Mojolicious', -signatures;
 use YAML qw(LoadFile);
 use List::Util qw(any);
+use DBI;
 
 # This method will run once at server start
 sub startup ($self) {
@@ -11,6 +12,8 @@ sub startup ($self) {
 
     my $home = $self->app->home;
     $home->detect;
+
+    $self->helper(dbh => sub { state $dbh = DBI->connect("dbi:SQLite:dbname=$config->{db_file}","","") });
 
     my $course_config = LoadFile($home->child($config->{course_config}));
     $self->helper(course_config => sub { state $course_config_data = $course_config });

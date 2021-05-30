@@ -15,11 +15,14 @@ my $course_config = get_course_config();
 
 subtest upload_no_upload_dir => sub {
     my $tempdir = tempdir(CLEANUP => 1);
+    my $db_file = "$tempdir/temp.db";
+    #system("sqlite3 $db_file < schema.sql");
     my $t = Test::Mojo->new('Course::Management', {
         secrets => ['1220edf81263ffb1a06f92304eafa2ce51cf7c69'],
         course_config => 'courses/config.yml',
         login_db => 'courses/login.yml',
         admin_email =>  'fake@code-maven.com',
+        db_file => $db_file,
         #upload_dir no upload dir in this test case!
     });
     login($t);
@@ -35,12 +38,15 @@ subtest upload_no_upload_dir => sub {
 
 subtest upload => sub {
     my $tempdir = tempdir(CLEANUP => 1);
+    my $db_file = "$tempdir/temp.db";
+    system("sqlite3 $db_file < schema.sql");
     my $t = Test::Mojo->new('Course::Management', {
         upload_dir => $tempdir,
         secrets => ['1220edf81263ffb1a06f92304eafa2ce51cf7c69'],
         course_config => 'courses/config.yml',
         login_db => 'courses/login.yml',
         admin_email =>  'fake@code-maven.com',
+        db_file => $db_file,
     });
     login($t);
 

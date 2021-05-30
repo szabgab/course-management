@@ -40,3 +40,9 @@ redirect to the list of courses.
 If the user is only listed in one course, after login and from the main page redirect to that course.
 
 
+## Create Database
+
+```
+sqlite3 courses.db < schema.sql
+```
+

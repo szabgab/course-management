@@ -35,6 +35,8 @@ sub upload ($self) {
     return $self->reply->exception('Upload directory does not exist')->rendered(500)
         if not -d $upload_dir;
 
+    my $email = $self->session('email');
+
     for my $exercise (@{ $course->{exercises} }) {
         for my $file (@{ $exercise->{files} }) {
             my $upload = $self->req->upload($file);
@@ -48,6 +50,8 @@ sub upload ($self) {
             $dir->make_path;
             my $filename = $dir->child($file);
             $upload->move_to($filename);
+
+            $self->dbh->do("INSERT INTO solutions (exercise_name, student_email) VALUES (?, ?)", undef, $exercise_name, $email);
         }
     }
 
