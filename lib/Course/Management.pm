@@ -61,12 +61,12 @@ sub startup ($self) {
     $r->get('/')->to('main#welcome');
     $r->post('/login')->to('main#login');
     $r->get('/login/:code')->to('main#login_get');
+    $r->get('/logout')->to('main#logout');
 
     # protected
     $authorized->get('/')->to('course#list_courses');
     $authorized->get('/:id')->to('course#list_exercises');
-    $r->post('/upload')->to('course#upload');
-    $r->get('/logout')->to('main#logout');
+    $authorized->post('/:id/upload')->to('course#upload');
 
     $admin_authorized->get('/')->to('admin#list_courses');
     $admin_authorized->get('/:id')->to('admin#list_solutions');

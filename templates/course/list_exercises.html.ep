@@ -3,8 +3,7 @@
 
 
 <p>
-  <form method="POST" action="/upload" enctype="multipart/form-data">
-  <input type="hidden" name="id" value="<%= $course->{id} %>">
+  <form method="POST" action="/course/<%= $course->{id} %>/upload" enctype="multipart/form-data">
   <input type="submit" value="Upload">
 
   <ul id="exercises">

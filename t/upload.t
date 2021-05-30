@@ -26,9 +26,8 @@ subtest upload_no_upload_dir => sub {
     my $content = 'bar';
     my $upload = {
         $course_config->[0]{exercises}[0]{files}[0] => {content => $content, filename => 'baz.txt'},
-        id => $course_config->[0]{id},
     };
-    $t->post_ok('/upload' => form => $upload)->status_is(500);
+    $t->post_ok("/course/$course_config->[0]{id}/upload" => form => $upload)->status_is(500);
     #diag $t->tx->res->body;
     $t->content_like(qr{Upload directory not configured});
 };
@@ -50,9 +49,8 @@ subtest upload => sub {
     my $content = 'bar';
     my $upload = {
         $course_config->[0]{exercises}[0]{files}[0] => {content => $content, filename => 'baz.txt'},
-        id => $course_config->[0]{id},
     };
-    $t->post_ok('/upload' => form => $upload)->status_is(200);
+    $t->post_ok("/course/$course_config->[0]{id}/upload" => form => $upload)->status_is(200);
     #diag $t->tx->res->body;
     $t->content_like(qr{Uploaded});
     (my $exercise_name = $course_config->[0]{exercises}[0]{url}) =~ s{[:/]+}{_}g;
