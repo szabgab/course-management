@@ -11,6 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Install dependencies
-        run: cpanm --installdeps --notest .
+        run: |
+          apt-get install -y sqlite3
+          cpanm --installdeps --notest .
       - name: Regular tests
         run: prove -l
